@@ -33,8 +33,8 @@ Mode opératoire : sur ordinateur ; vous **devez** amener votre ordinateur perso
 
 ## Tests écrits
 
-- TE1 : date à venir, 12.5% de la note finale
-- TE2 : date à venir, 12.5% de la note finale
+- TE1 : 10.IV.2025, 12.5% de la note finale
+- TE2 : 22.V.2025, 12.5% de la note finale
 
 Mode opératoire : sur ordinateur ; vous **devez** amener votre ordinateur personnel pour les TE.
 
