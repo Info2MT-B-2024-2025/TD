@@ -1,5 +1,6 @@
+
 {
-	"image": "314rch/info1:v14",
+	"image": "314rch/info1:v12",
 	"features": {},
 	"customizations": {
 		"vscode": {
