@@ -33,8 +33,8 @@ Mode opératoire : sur ordinateur ; vous **devez** amener votre ordinateur perso
 
 ## Tests écrits
 
-- TE1 : date à venir, 12.5% de la note finale
-- TE2 : date à venir, 12.5% de la note finale
+- TE1 : 10.IV.2025, 12.5% de la note finale
+- TE2 : 22.V.2025, 12.5% de la note finale
 
 Mode opératoire : sur ordinateur ; vous **devez** amener votre ordinateur personnel pour les TE.
 
@@ -65,5 +65,5 @@ Mode opératoire : sur papier uniquement.
 - Teams https://teams.microsoft.com/l/channel/19%3AqeWVSBHTIOFEym0rAWsk1GOsweENejudJ34fkWhkXNM1%40thread.tacv2/?groupId=704c0089-3a6d-4a81-9416-88972a128e38&tenantId=a372f724-c0b2-4ea0-abfb-0eb8c6f84e40
 - Github
 - Visual Studio Code
-- Tests écrits : https://eval.iict-heig-vd.in/users/evaluations/cm77fb50b0a4dx8z1o9al6i99
+- Tests écrits : [https://eval.iict-heig-vd.in/users/evaluations/cm77fb50b0a4dx8z1o9al6i99](https://eval.iict-heig-vd.in/users/evaluations/cm78wo70j0a52x8z1zu466rdz)
 
