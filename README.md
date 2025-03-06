@@ -44,6 +44,10 @@ Les notes obtenues aux travaux de laboratoires comptent pour 25% de la note fina
 
 Mode opératoire : sur ordinateur ; vous **devez** amener votre ordinateur personnel pour les labos.
 
+- L1 : 01.IV.2025
+- L2 : 13.V.2025
+- L3 : 10.VI.2025
+
 
 ## Examen
 
