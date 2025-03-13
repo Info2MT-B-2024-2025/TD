@@ -1,0 +1,251 @@
+#include <stdio.h>
+#include <stdint.h>
+#include <math.h>
+
+
+#if 0
+
+#pragma pack(1)
+typedef struct
+{
+	uint16_t signature;
+	uint32_t filesize;
+	uint32_t unused;
+	uint32_t data_offset;
+} bitmap_file_header;
+
+typedef struct
+{
+	uint32_t filesize;
+	uint32_t img_width;
+	uint32_t img_height;
+	uint16_t num_planes;
+	uint16_t bit_per_pixel;
+} bitmap_info_header;
+#pragma pack(0)
+
+int main_test(int argc, const char *argv[])
+{
+	const char *filename = "./data/test.bmp";
+	char *mode = "wb+";
+
+	// open the file
+	FILE *f = NULL;
+	f = fopen(filename, mode);
+	if (NULL == f)
+	{
+		printf("Error, unable to open [%s].\n", filename);
+		return 1;
+	}
+
+	uint8_t a = 0;
+
+	for (int i = 0; i < 10; i++, a++)
+	{
+		fwrite(&a, sizeof(uint8_t), 1, f);
+	}
+	fseek(f, 3, SEEK_SET);
+	a = 255;
+	fwrite(&a, sizeof(uint8_t), 1, f);
+	fseek(f, 3, SEEK_SET);
+	a = 0;
+	fread(&a, sizeof(uint8_t), 1, f);
+	printf("a=%3d ", a);
+
+	// close the file
+	if (0 != fclose(f))
+	{
+		printf("Error, unable to close [%s].\n", filename);
+		return 2;
+	};
+
+#if 0
+	const char *filename2 = "./data/test.bmp";
+	char *mode2 = "rb+";
+
+	// open the file
+	FILE *f2 = NULL;
+	f2 = fopen(filename2, mode2);
+	if (NULL == f2)
+	{
+		printf("Error, unable to open [%s].\n", filename);
+		return 1;
+	}
+
+	a = 0;
+	fseek(f2, 0, SEEK_END);
+	for (int i = 0; i < 10; i++, a++)
+	{
+		fwrite(&a, sizeof(uint8_t), 1, f2);
+	}
+
+	// close the file
+	if (0 != fclose(f2))
+	{
+		printf("Error, unable to close [%s].\n", filename);
+		return 2;
+	};
+#endif
+	return 0;
+}
+
+int main(int argc, const char *argv[])
+{
+	const char *filename = "./data/im1.bmp";
+	char *mode = "rb+";
+
+	// open the file
+	FILE *f = NULL;
+	f = fopen(filename, mode);
+	if (NULL == f)
+	{
+		printf("Error, unable to open [%s].\n", filename);
+		return 1;
+	}
+
+	uint8_t a = 0;
+	fread(&a, sizeof(uint8_t), 1, f);
+	printf("%02X [%c]\n", a, a); // must be 0x42
+	fread(&a, sizeof(uint8_t), 1, f);
+	printf("%02X [%c]\n", a, a); // must be 0x4D
+
+	uint32_t filesize = 0;
+	fread(&filesize, sizeof(uint32_t), 1, f);
+	printf("filesize = %u\n", filesize); // must be 308280 - the size of the file
+
+	fseek(f, 4, SEEK_CUR);
+	uint32_t data_offset = 0;
+	fread(&data_offset, sizeof(uint32_t), 1, f);
+	printf("data_offset = %u\n", data_offset); // must be 1078
+
+	fseek(f, 4, SEEK_CUR);
+	uint32_t img_width = 0;
+	fread(&img_width, sizeof(uint32_t), 1, f);
+	printf("img_width = %u\n", img_width); // must be 640 - the width of the image
+
+	uint32_t img_height = 0;
+	fread(&img_height, sizeof(uint32_t), 1, f);
+	printf("img_height = %u\n", img_height); // must be 480 - the width of the image
+
+	uint16_t num_planes = 0;
+	fread(&num_planes, sizeof(uint16_t), 1, f);
+	printf("num_planes = %hu\n", num_planes); // must be 1 - the number of planes in the image ; 1 plane = gray image
+
+	fseek(f, data_offset, SEEK_SET);
+	fread(&a, sizeof(uint8_t), 1, f);
+	printf("%3d ", a);
+	fread(&a, sizeof(uint8_t), 1, f);
+	printf("%3d ", a);
+	fread(&a, sizeof(uint8_t), 1, f);
+	printf("%3d ", a);
+	fread(&a, sizeof(uint8_t), 1, f);
+	printf("%3d ", a);
+	puts("");
+
+	rewind(f);
+	bitmap_file_header file_header;
+	bitmap_info_header info_header;
+	fread(&file_header, sizeof(bitmap_file_header), 1, f);
+	fread(&info_header, sizeof(bitmap_info_header), 1, f);
+	printf("width = %d, height=%d\n", info_header.img_width, info_header.img_height);
+	printf("num_planes = %hu\n", info_header.num_planes);
+	printf("bit_per_pixel = %hu\n", info_header.bit_per_pixel);
+	fseek(f, file_header.data_offset, SEEK_SET);
+	a = 0;
+
+	for (int i = 0; i < info_header.img_width * info_header.img_height / 3; i++)
+	{
+		fwrite(&a, sizeof(uint8_t), 1, f);
+	}
+	puts("");
+
+	// close the file
+	if (0 != fclose(f))
+	{
+		printf("Error, unable to close [%s].\n", filename);
+		return 2;
+	};
+	return 0;
+}
+
+int main1(int argc, const char *argv[])
+{
+	const char *filename = "./data/im1.bmp";
+	char *mode = "rb";
+
+	// open the file
+	FILE *f = NULL;
+	f = fopen(filename, mode);
+	if (NULL == f)
+	{
+		printf("Error, unable to open [%s].\n", filename);
+		return 1;
+	}
+
+	uint8_t a = 0;
+	fread(&a, sizeof(uint8_t), 1, f);
+	printf("%02X [%c]\n", a, a); // must be 0x42
+	fread(&a, sizeof(uint8_t), 1, f);
+	printf("%02X [%c]\n", a, a); // must be 0x4D
+
+	uint32_t filesize = 0;
+	fread(&filesize, sizeof(uint32_t), 1, f);
+	printf("filesize = %u\n", filesize); // must be 308280 - the size of the file
+
+	fseek(f, 4, SEEK_CUR);
+	uint32_t data_offset = 0;
+	fread(&data_offset, sizeof(uint32_t), 1, f);
+	printf("data_offset = %u\n", data_offset); // must be 1078
+
+	fseek(f, 4, SEEK_CUR);
+	uint32_t img_width = 0;
+	fread(&img_width, sizeof(uint32_t), 1, f);
+	printf("img_width = %u\n", img_width); // must be 640 - the width of the image
+
+	uint32_t img_height = 0;
+	fread(&img_height, sizeof(uint32_t), 1, f);
+	printf("img_height = %u\n", img_height); // must be 480 - the width of the image
+
+	uint16_t num_planes = 0;
+	fread(&num_planes, sizeof(uint16_t), 1, f);
+	printf("num_planes = %hu\n", num_planes); // must be 1 - the number of planes in the image ; 1 plane = gray image
+
+	fseek(f, data_offset, SEEK_SET);
+	fread(&a, sizeof(uint8_t), 1, f);
+	printf("%3d ", a);
+	fread(&a, sizeof(uint8_t), 1, f);
+	printf("%3d ", a);
+	fread(&a, sizeof(uint8_t), 1, f);
+	printf("%3d ", a);
+	fread(&a, sizeof(uint8_t), 1, f);
+	printf("%3d ", a);
+	puts("");
+
+	rewind(f);
+	bitmap_file_header file_header;
+	bitmap_info_header info_header;
+	fread(&file_header, sizeof(bitmap_file_header), 1, f);
+	fread(&info_header, sizeof(bitmap_info_header), 1, f);
+	printf("width = %d, height=%d\n", info_header.img_width, info_header.img_height);
+	printf("num_planes = %hu\n", info_header.num_planes);
+	printf("bit_per_pixel = %hu\n", info_header.bit_per_pixel);
+	fseek(f, file_header.data_offset, SEEK_SET);
+
+	for (int i = 0; i < 4; i++)
+	{
+		fread(&a, sizeof(uint8_t), 1, f);
+		printf("%3d ", a);
+	}
+	puts("");
+
+	// close the file
+	if (0 != fclose(f))
+	{
+		printf("Error, unable to close [%s].\n", filename);
+		return 2;
+	};
+	return 0;
+}
+
+
+#endif
