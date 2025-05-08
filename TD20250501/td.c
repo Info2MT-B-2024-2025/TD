@@ -24,6 +24,9 @@ int main(int argc, const char *argv[])
 	if(err) printf("error=%d\n",err);
 	display_list(l);
 
+	err=delete_elem(&l, 0);
+	if(err) printf("error=%d\n",err);
+	display_list(l);
 
 	return 0;
 }
