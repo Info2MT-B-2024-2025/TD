@@ -29,7 +29,7 @@ error_code insert_list(list *l, const elem e, const size_t pos)
     for (size_t index = l->count; index > pos; index--)
         l->t[index] = l->t[index - 1];
     l->t[pos] = e;
-    l->count++;
+    l->count++; 
     return NO_ERROR;
 }
 error_code delete_elem(list *l, const size_t pos)
